@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  password     String?
+  googleId     String?  @unique
+  name         String   @db.VarChar(100)
+  profileImage String?  @db.VarChar(255)
+  createdAt    DateTime @default(now())
+
+  allergies       UserAllergies[]
+  reviews         Review[]
+  favoriteRecipes FavoriteRecipe[]
+  shoppingLists   ShoppingList[]
+}
+
+model Ingredient {
+  id       String  @id @default(uuid())
+  name     String  @unique @db.VarChar(255)
+  category String  @db.VarChar(100)
+  imageUrl String? @db.VarChar(255)
+
+  allergies         UserAllergies[]
+  recipeIngredients RecipeIngredient[]
+  shoppingListItems ShoppingListItem[]
+}
+
+model UserAllergies {
+  id           String @id @default(uuid())
+  userId       String
+  ingredientId String
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, ingredientId]) // Ensures a user cannot have duplicate allergies to the same ingredient
+}
+
+model Recipe {
+  id          String   @id @default(uuid())
+  title       String   @db.VarChar(255)
+  description String   @db.Text
+  cookingTime Int
+  difficulty  String   @db.VarChar(50)
+  servings    Int
+  imageUrl    String?  @db.VarChar(255)
+  createdAt   DateTime @default(now())
+
+  ingredients RecipeIngredient[]
+  steps       RecipeStep[]
+  reviews     Review[]
+  favorites   FavoriteRecipe[]
+}
+
+model RecipeIngredient {
+  id           String @id @default(uuid())
+  recipeId     String
+  ingredientId String
+  quantity     Int
+  quantityType String @db.VarChar(255)
+
+  recipe     Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+}
+
+model RecipeStep {
+  id          String @id @default(uuid())
+  recipeId    String
+  stepOrder   Int
+  description String @db.Text
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  recipeId  String
+  rating    Int
+  comment   String   @db.Text
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+}
+
+model FavoriteRecipe {
+  id        String   @id @default(uuid())
+  userId    String
+  recipeId  String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+}
+
+model ShoppingList {
+  id        String   @id @default(uuid())
+  userId    String
+  createdAt DateTime @default(now())
+
+  user  User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items ShoppingListItem[]
+}
+
+model ShoppingListItem {
+  id             String  @id @default(uuid())
+  shoppingListId String
+  ingredientId   String
+  quantity       Int
+  quantityType   String  @db.VarChar(255)
+  checked        Boolean @default(false)
+
+  shoppingList ShoppingList @relation(fields: [shoppingListId], references: [id], onDelete: Cascade)
+  ingredient   Ingredient   @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+}
