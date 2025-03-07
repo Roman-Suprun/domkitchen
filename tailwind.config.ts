@@ -1,18 +1,29 @@
 import type { Config } from 'tailwindcss';
+import plugin from 'tailwindcss/plugin';
 
-export default {
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}  ',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+const config: Config = {
+  content: ['./src/**/*.{ts,tsx}'],
+  future: { hoverOnlyWhenSupported: true },
   theme: {
     extend: {
-      colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
+      fontFamily: {
+        urbanist: ['var(--font-urbanist)', 'sans-serif'],
       },
     },
   },
-  plugins: [],
-} satisfies Config;
+  plugins: [
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        /* 100vh is a fallback for Opera, IE and etc. */
+        '.h-full-screen': {
+          height: ['100vh', '100dvh'],
+        },
+        '.min-h-full-screen': {
+          minHeight: ['100vh', '100dvh'],
+        },
+      });
+    }),
+  ],
+};
+
+export default config;
