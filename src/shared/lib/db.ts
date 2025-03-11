@@ -7,12 +7,13 @@ const prismaClientSingleton = () => {
   return new PrismaClient().$extends(withAccelerate());
 };
 
-declare const globalThis: {
-  prismaGlobal: ReturnType<typeof prismaClientSingleton>;
-} & typeof global;
+const globalForPrisma = global as unknown as {
+  prismaClient: ReturnType<typeof prismaClientSingleton>;
+};
 
-const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
+const prismaClient = globalForPrisma.prismaClient ?? prismaClientSingleton();
 
-export { prisma };
+export { prismaClient };
 
-if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma;
+if (process.env.NODE_ENV !== 'production')
+  globalForPrisma.prismaClient = prismaClient;
