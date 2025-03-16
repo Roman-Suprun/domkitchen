@@ -1,19 +1,13 @@
 import { FC } from 'react';
 
-import { RecipeCard } from '../RecipeCard';
+import { Recipe } from '@prisma/client';
 
-type Recipe = {
-  id: string;
-  title: string;
-  cookingTime: string;
-  difficulty: string;
-  isFavourite: boolean;
-};
+import { RecipeCard } from '../RecipeCard';
 
 type RecipeListProps = {
   title: string;
   description: string;
-  recipes: Recipe[];
+  recipes?: Recipe[];
 };
 
 export const RecipeList: FC<RecipeListProps> = ({
@@ -21,6 +15,8 @@ export const RecipeList: FC<RecipeListProps> = ({
   description,
   recipes,
 }) => {
+  if (!recipes) return null;
+
   return (
     <section className="max-w-7xl mx-auto py-10">
       <h2 className="text-3xl font-bold text-black text-center">{title}</h2>

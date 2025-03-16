@@ -11,11 +11,15 @@ type RecipeStep = {
 };
 
 type RecipeStepsProps = {
-  steps: RecipeStep[];
+  steps?: RecipeStep[];
 };
 
 export const RecipeSteps: FC<RecipeStepsProps> = ({ steps }) => {
   const [checkedSteps, setCheckedSteps] = useState<Record<string, boolean>>({});
+
+  if (!steps) {
+    return null;
+  }
 
   const toggleStep = (id: string) => {
     setCheckedSteps(prev => ({

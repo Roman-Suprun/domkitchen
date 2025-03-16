@@ -11,8 +11,9 @@ const config: Config = {
       },
     },
     backgroundImage: {
-      'main-gradient': 'linear-gradient(180deg, rgba(231, 249, 253, 0) 0%, #E7F9FD 100%)'
-    }
+      'main-gradient':
+        'linear-gradient(180deg, rgba(231, 249, 253, 0) 0%, #E7F9FD 100%)',
+    },
   },
   plugins: [
     plugin(({ addUtilities }) => {

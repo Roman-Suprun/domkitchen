@@ -4,15 +4,10 @@ import { FC, useState } from 'react';
 
 import { CheckCircle, Circle } from 'lucide-react';
 
-type RecipeIngredient = {
-  id: string;
-  ingredientName: string;
-  quantity: number;
-  quantityType: string;
-};
+import { FullRecipeIngredient } from 'shared/ts/common';
 
 type RecipeIngredientsProps = {
-  ingredients: RecipeIngredient[];
+  ingredients?: FullRecipeIngredient[];
 };
 
 export const RecipeIngredients: FC<RecipeIngredientsProps> = ({
@@ -21,6 +16,10 @@ export const RecipeIngredients: FC<RecipeIngredientsProps> = ({
   const [checkedIngredients, setCheckedIngredients] = useState<
     Record<string, boolean>
   >({});
+
+  if (!ingredients) {
+    return null;
+  }
 
   const toggleIngredient = (id: string) => {
     setCheckedIngredients(prev => ({
@@ -60,7 +59,7 @@ export const RecipeIngredients: FC<RecipeIngredientsProps> = ({
                 }`}
               >
                 {ingredient.quantity} {ingredient.quantityType}{' '}
-                {ingredient.ingredientName}
+                {ingredient.ingredient.name}
               </span>
             </button>
           </li>

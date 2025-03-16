@@ -1,37 +1,9 @@
+import { getRecipesListing } from 'actions/recipe/getListing';
+
 import { RecipeList } from 'features/Recipe/RecipeList';
 
-const recipes = [
-  {
-    id: '1',
-    title: 'Pasta Carbonara',
-    cookingTime: '20',
-    difficulty: 'Easy',
-    isFavourite: true,
-  },
-  {
-    id: '2',
-    title: 'Grilled Chicken',
-    cookingTime: '35',
-    difficulty: 'Medium',
-    isFavourite: false,
-  },
-  {
-    id: '3',
-    title: 'Chocolate Cake',
-    cookingTime: '45',
-    difficulty: 'Hard',
-    isFavourite: true,
-  },
-  {
-    id: '4',
-    title: 'Avocado Toast',
-    cookingTime: '10',
-    difficulty: 'Easy',
-    isFavourite: false,
-  },
-];
-
-const HomePage = () => {
+const HomePage = async () => {
+  const { data: recipes } = await getRecipesListing({ page: 1, limit: 4 });
   // const session = await getSession();
   // const { user } = session || {};
   // const { email } = user || {};
