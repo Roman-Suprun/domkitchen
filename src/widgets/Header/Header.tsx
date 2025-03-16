@@ -8,11 +8,12 @@ import { LogoutButton } from '../../shared/ui/Button';
 
 export const Header = async () => {
   const session = await getSession();
+
   const { user } = session || {};
   const { email } = user || {};
 
   return (
-    <section className="w-full h-[50px] border flex justify-between items-center px-10">
+    <section className="w-full h-[110px] border-b flex justify-between items-center px-10">
       <Link href={STATIC_ROUTES.HOME} className="text-gray-600">
         LOGO
       </Link>
