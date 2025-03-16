@@ -9,6 +9,7 @@ import { RecipeNutrition } from 'features/Recipe/RecipeNutrition';
 import { RecipeReviewForm } from 'features/Recipe/RecipeReviewForm';
 import { RecipeReviewsList } from 'features/Recipe/RecipeReviewList';
 import { RecipeSteps } from 'features/Recipe/RecipeSteps';
+import { getSession } from 'shared/lib/auth/getAuth';
 
 const nutritionData = [
   { label: 'Calories', value: '219.9 kcal' },
@@ -18,24 +19,6 @@ const nutritionData = [
   { label: 'Cholesterol', value: '37.4 mg' },
 ];
 
-const initialReviews = [
-  {
-    id: '1',
-    user: { name: 'Alice Johnson', avatar: '/avatars/alice.png' },
-    rating: 5,
-    comment:
-      'Absolutely loved this recipe! Super easy to follow and delicious.',
-    createdAt: '2024-03-01T10:00:00Z',
-  },
-  {
-    id: '2',
-    user: { name: 'Michael Smith', avatar: '/avatars/michael.png' },
-    rating: 4,
-    comment: 'Tastes great, but I added extra seasoning for more flavor!',
-    createdAt: '2024-03-02T15:30:00Z',
-  },
-];
-
 type RecipeDetailedPageProps = {
   recipeId: string;
 };
@@ -43,7 +26,12 @@ type RecipeDetailedPageProps = {
 export const RecipeDetailedPage: FC<RecipeDetailedPageProps> = async ({
   recipeId,
 }) => {
+  const session = await getSession();
   const { data: recipe } = await getRecipeById(recipeId);
+
+  const { user } = session || {};
+  const { email } = user || {};
+
   return (
     <div className="pt-16 max-w-7xl m-auto">
       <h1 className="text-5xl font-bold mb-10">{recipe?.title}</h1>
@@ -64,8 +52,9 @@ export const RecipeDetailedPage: FC<RecipeDetailedPageProps> = async ({
       <p>{recipe?.description}</p>
       <RecipeIngredients ingredients={recipe?.ingredients} />
       <RecipeSteps steps={recipe?.steps} />
-      <RecipeReviewForm />
-      <RecipeReviewsList reviews={initialReviews} />
+      {/* TODO: show no form if review is already added */}
+      {email && <RecipeReviewForm recipeId={recipeId} />}
+      <RecipeReviewsList recipeId={recipeId} />
     </div>
   );
 };
