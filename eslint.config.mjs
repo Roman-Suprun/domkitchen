@@ -59,6 +59,7 @@ export default tseslint.config(
       'react/jsx-props-no-spreading': 0,
       'react/require-default-props': 0,
       'no-param-reassign': 0,
+      'react/button-has-type': 0,
       'react/jsx-filename-extension': [
         2,
         { extensions: ['.js', '.jsx', '.ts', '.tsx'] },

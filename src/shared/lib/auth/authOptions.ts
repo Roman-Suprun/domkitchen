@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
 
         const isValid = await bcrypt.compare(
           credentials.password,
-          user.password || '',
+          user.password,
         );
         if (!isValid) {
           throw new Error('Invalid password');
@@ -40,7 +40,6 @@ export const authOptions: NextAuthOptions = {
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
-          avatarUrl: user.avatarUrl,
         };
       },
     }),
@@ -49,26 +48,24 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
   },
   callbacks: {
-    // async jwt({ token, user }) {
-    //   if (user) {
-    //     token.id = user.id;
-    //     token.firstName = user.firstName;
-    //     token.lastName = user.lastName;
-    //     token.email = user.email;
-    //     token.avatarUrl = user.avatarUrl;
-    //   }
-    //   return token;
-    // },
-    // async session({ session, token }) {
-    //   if (session.user) {
-    //     session.user.id = token.id;
-    //     session.user.firstName = token.firstName;
-    //     session.user.lastName = token.lastName;
-    //     session.user.email = token.email;
-    //     session.user.avatarUrl = token.avatarUrl;
-    //   }
-    //   return session;
-    // },
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.firstName = user.firstName;
+        token.lastName = user.lastName;
+        token.email = user.email;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id;
+        session.user.firstName = token.firstName;
+        session.user.lastName = token.lastName;
+        session.user.email = token.email;
+      }
+      return session;
+    },
   },
   pages: {
     signIn: '/login',

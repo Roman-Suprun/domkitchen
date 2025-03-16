@@ -46,10 +46,7 @@ export const Input = ({
             type={type}
             placeholder={placeholder}
             className={twMerge(
-              cn(
-                'border p-2 rounded-md w-[320px] focus:ring-2 focus:ring-blue-500 outline-none',
-                className,
-              ),
+              cn('border px-6 rounded-xl w-full outline-none h-14', className),
             )}
             {...props}
           />

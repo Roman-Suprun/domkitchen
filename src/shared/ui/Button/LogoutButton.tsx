@@ -7,9 +7,5 @@ import { signOut } from 'next-auth/react';
 import { Button } from './Button';
 
 export const LogoutButton = () => {
-  return (
-    <Button className="bg-green-50" onClick={() => signOut()}>
-      Logout
-    </Button>
-  );
+  return <Button onClick={() => signOut()}>Logout</Button>;
 };

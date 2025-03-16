@@ -11,9 +11,9 @@ import { RecipeMetaInfo } from '../RecipeMetaInfo';
 type RecipeCardProps = {
   id: string;
   title: string;
-  cookingTime: string;
+  cookingTime: number;
   difficulty: string;
-  isFavourite: boolean;
+  // isFavourite: boolean;
 };
 
 export const RecipeCard: FC<RecipeCardProps> = ({
@@ -21,7 +21,7 @@ export const RecipeCard: FC<RecipeCardProps> = ({
   title,
   cookingTime,
   difficulty,
-  isFavourite = false,
+  // isFavourite = false,
 }) => {
   return (
     <Link
@@ -37,7 +37,8 @@ export const RecipeCard: FC<RecipeCardProps> = ({
           alt={`Image of ${title}`}
           className="object-cover w-full h-full"
         />
-        <RecipeFavouriteButton isFavourite={isFavourite} />
+        {/* TODO: add support for isFavourite */}
+        <RecipeFavouriteButton isFavourite={false} />
       </div>
       <h3 className="mt-4 text-lg font-semibold text-black">{title}</h3>
       <div className="mt-4 flex flex-wrap gap-x-4 text-gray-700">
