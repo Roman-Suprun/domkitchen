@@ -1,0 +1,36 @@
+export const ingredientCategories = {
+  vegetables: 'Vegetables',
+  fruits: 'Fruits',
+  dairy: 'Dairy Products',
+  meats: 'Meats',
+  seafood: 'Seafood',
+  grains: 'Grains & Cereals',
+  legumes: 'Legumes & Beans',
+  nutsAndSeeds: 'Nuts & Seeds',
+  herbsAndSpices: 'Herbs & Spices',
+  oilsAndFats: 'Oils & Fats',
+  condiments: 'Condiments & Sauces',
+  sweeteners: 'Sweeteners',
+  beverages: 'Beverages',
+  bakedGoods: 'Baked Goods',
+  cannedGoods: 'Canned & Jarred Foods',
+  frozenFoods: 'Frozen Foods',
+  snacks: 'Snacks',
+  pastaAndNoodles: 'Pasta & Noodles',
+  dairyAlternatives: 'Dairy Alternatives',
+  meatAlternatives: 'Meat Alternatives',
+  eggs: 'Eggs',
+  fermentedFoods: 'Fermented Foods',
+  mushrooms: 'Mushrooms',
+  alcohol: 'Alcoholic Beverages',
+  nonAlcoholicDrinks: 'Non-Alcoholic Drinks',
+  seasoningBlends: 'Seasoning Blends',
+  spreads: 'Spreads',
+  pickledFoods: 'Pickled Foods',
+  babyFood: 'Baby Food',
+  petFood: 'Pet Food',
+} as const;
+
+type TIngredientCategories = keyof typeof ingredientCategories;
+
+export default ingredientCategories;
