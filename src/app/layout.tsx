@@ -5,8 +5,6 @@ import { Urbanist } from 'next/font/google';
 
 import 'app/styles/global.css';
 
-import MainLayout from '../shared/ui/layouts/MainLayout';
-
 const urbanist = Urbanist({
   subsets: ['latin'],
   variable: '--font-urbanist',
@@ -23,9 +21,7 @@ export default function RootLayout({
 }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en">
-      <body className={urbanist.className}>
-        <MainLayout>{children}</MainLayout>
-      </body>
+      <body className={urbanist.className}>{children}</body>
     </html>
   );
 }

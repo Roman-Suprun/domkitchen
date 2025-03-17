@@ -9,7 +9,7 @@ import { RecipeNutrition } from 'features/Recipe/RecipeNutrition';
 import { RecipeReviewForm } from 'features/Recipe/RecipeReviewForm';
 import { RecipeReviewsList } from 'features/Recipe/RecipeReviewList';
 import { RecipeSteps } from 'features/Recipe/RecipeSteps';
-import { getSession } from 'shared/lib/auth/getAuth';
+import { auth } from 'shared/lib/auth';
 
 const nutritionData = [
   { label: 'Calories', value: '219.9 kcal' },
@@ -26,7 +26,7 @@ type RecipeDetailedPageProps = {
 export const RecipeDetailedPage: FC<RecipeDetailedPageProps> = async ({
   recipeId,
 }) => {
-  const session = await getSession();
+  const session = await auth();
   const { data: recipe } = await getRecipeById(recipeId);
 
   const { user } = session || {};

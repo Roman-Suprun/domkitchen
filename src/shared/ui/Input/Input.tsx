@@ -1,63 +1,37 @@
-'use client';
+import { FC, InputHTMLAttributes } from 'react';
 
-import { InputHTMLAttributes } from 'react';
+import { cn } from 'shared/lib/cn';
 
-import { Controller, useFormContext } from 'react-hook-form';
-import { twMerge } from 'tailwind-merge';
+import { Field } from '../Field';
 
-import { cn } from '../../lib/cn';
-
-interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
-  name: string;
-  label?: string;
-  type?: 'text' | 'email' | 'password' | 'number';
-  placeholder?: string;
-  className?: string;
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  startElement?: React.ReactNode;
+  endElement?: React.ReactNode;
+  fullWidth?: boolean;
 }
 
-export const Input = ({
-  name,
-  label,
-  type = 'text',
-  placeholder,
+const Input: FC<InputProps> = ({
   className,
-  ...props
-}: InputFieldProps) => {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext();
-
+  startElement,
+  endElement,
+  fullWidth,
+  ...rest
+}) => {
   return (
-    <div className="flex flex-col gap-2 items-start">
-      {label && (
-        <label htmlFor={name} className="text-sm font-medium">
-          {label}
-        </label>
-      )}
-
-      <Controller
-        name={name}
-        control={control}
-        render={({ field }) => (
-          <input
-            {...field}
-            id={name}
-            type={type}
-            placeholder={placeholder}
-            className={twMerge(
-              cn('border px-6 rounded-xl w-full outline-none h-14', className),
-            )}
-            {...props}
-          />
+    <Field
+      fullWidth={fullWidth}
+      startElement={startElement}
+      endElement={endElement}
+    >
+      <input
+        className={cn(
+          'file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground',
+          className,
         )}
+        {...rest}
       />
-
-      {errors[name] && (
-        <span className="text-red-500 text-sm">
-          {(errors[name]?.message as string) || 'Invalid input'}
-        </span>
-      )}
-    </div>
+    </Field>
   );
 };
+
+export { Input };

@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { SignUpPage } from '../../../views/sign-up';
+import { SignUpPage } from 'views/signUp';
 
 const Page = () => {
   return <SignUpPage />;

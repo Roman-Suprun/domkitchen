@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 
-import { prismaClient } from '../../shared/lib/db';
+import { prisma } from 'shared/lib/prisma';
 
 const getReviewsSchema = z.object({
   recipeId: z.string().uuid(),
@@ -14,11 +14,11 @@ export async function getRecipeReviews(input: unknown) {
   try {
     const { recipeId, page, limit } = getReviewsSchema.parse(input);
 
-    const totalReviews = await prismaClient.review.count({
+    const totalReviews = await prisma.review.count({
       where: { recipeId },
     });
 
-    const reviews = await prismaClient.review.findMany({
+    const reviews = await prisma.review.findMany({
       where: { recipeId },
       skip: (page - 1) * limit,
       take: limit,

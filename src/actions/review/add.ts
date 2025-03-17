@@ -1,12 +1,9 @@
 'use server';
 
-import { getServerSession } from 'next-auth';
-
 import { z } from 'zod';
 
-import { authOptions } from 'shared/lib/auth/authOptions';
-
-import { prismaClient } from '../../shared/lib/db';
+import { auth } from 'shared/lib/auth';
+import { prisma } from 'shared/lib/prisma';
 
 const addReviewSchema = z.object({
   recipeId: z.string().uuid(),
@@ -18,12 +15,12 @@ export async function addReview(input: unknown) {
   try {
     const { recipeId, rating, comment } = addReviewSchema.parse(input);
 
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     if (!session?.user?.id) {
       return { success: false, message: 'Unauthorized' };
     }
 
-    const recipeExists = await prismaClient.recipe.findUnique({
+    const recipeExists = await prisma.recipe.findUnique({
       where: { id: recipeId },
     });
 
@@ -31,7 +28,7 @@ export async function addReview(input: unknown) {
       return { success: false, message: 'Recipe not found' };
     }
 
-    await prismaClient.review.create({
+    await prisma.review.create({
       data: {
         userId: session.user.id,
         recipeId,
