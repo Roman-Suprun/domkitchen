@@ -86,6 +86,7 @@ export const RecipeReviewsList = ({ recipeId }: { recipeId: string }) => {
 
           <div className="flex justify-center gap-4 mt-6">
             <button
+              type={'button'}
               className="px-4 py-2 bg-gray-200 rounded-md disabled:opacity-50"
               disabled={page === 1}
               onClick={() => setPage(prev => prev - 1)}
@@ -96,6 +97,7 @@ export const RecipeReviewsList = ({ recipeId }: { recipeId: string }) => {
               Page {page} of {totalPages}
             </span>
             <button
+              type={'button'}
               className="px-4 py-2 bg-gray-200 rounded-md disabled:opacity-50"
               disabled={page === totalPages}
               onClick={() => setPage(prev => prev + 1)}
