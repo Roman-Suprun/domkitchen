@@ -2,11 +2,11 @@
 
 import { z } from 'zod';
 
-import { prismaClient } from '../../shared/lib/db';
+import { prisma } from 'shared/lib/prisma';
 
 export async function getIngredients() {
   try {
-    const ingredients = await prismaClient.ingredient.findMany({
+    const ingredients = await prisma.ingredient.findMany({
       orderBy: { name: 'asc' },
     });
 

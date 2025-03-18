@@ -1,13 +1,14 @@
 import { z } from 'zod';
 
-import { prismaClient } from '../../shared/lib/db';
+import { prisma } from 'shared/lib/prisma';
+
 import { ingredientSchema } from '../../shared/lib/validation/ingredient';
 
 export async function addIngredient(input: unknown) {
   try {
     const data = ingredientSchema.parse(input);
 
-    const ingredient = await prismaClient.ingredient.create({
+    const ingredient = await prisma.ingredient.create({
       data,
     });
 

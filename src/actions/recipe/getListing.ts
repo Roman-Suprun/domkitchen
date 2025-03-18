@@ -3,7 +3,8 @@
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
-import { prismaClient } from '../../shared/lib/db';
+import { prisma } from 'shared/lib/prisma';
+
 import { getRecipesSchema } from '../../shared/lib/validation/recipe';
 
 export async function getRecipesListing(input: unknown) {
@@ -24,9 +25,9 @@ export async function getRecipesListing(input: unknown) {
       };
     }
 
-    const totalRecipes = await prismaClient.recipe.count({ where });
+    const totalRecipes = await prisma.recipe.count({ where });
 
-    const recipes = await prismaClient.recipe.findMany({
+    const recipes = await prisma.recipe.findMany({
       where,
       skip: (page - 1) * limit,
       take: limit,

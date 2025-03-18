@@ -1,45 +1,53 @@
-import React, { ButtonHTMLAttributes, FC, ReactNode } from 'react';
+import { ButtonHTMLAttributes, forwardRef } from 'react';
 
-import { cn } from '../../lib/cn';
+import { Slot } from '@radix-ui/react-slot';
+import { cva, type VariantProps } from 'class-variance-authority';
 
-type TButton = {
-  variant?: 'primary' | 'secondary';
-  size?: 'big' | 'small';
-  type?: 'button' | 'submit' | 'reset';
-  disabled?: boolean;
-  className?: string;
-  children?: ReactNode | string;
-};
+import { cn } from 'shared/lib/cn';
 
-export type TButtonElementProps = TButton &
-  ButtonHTMLAttributes<HTMLButtonElement>;
+const buttonVariants = cva(
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50',
+  {
+    variants: {
+      variant: {
+        default: 'bg-stone-950 text-white hover:bg-stone-950/90',
+      },
+      size: {
+        default: 'h-9 px-4 py-2',
+        xl: 'h-14 rounded-xl',
+      },
+    },
 
-export const Button: FC<TButtonElementProps> = props => {
-  const {
-    disabled,
-    variant = 'primary',
-    size = 'big',
-    type = 'button',
-    children,
-    className,
-    ...rest
-  } = props;
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
+  },
+);
 
-  return (
-    <button
-      {...rest}
-      type={type}
-      disabled={disabled}
-      className={cn(
-        'rounded-2xl cursor-pointer border-2 bg-black text-white border-black font-semibold outline-none transition-all hover:text-black hover:bg-white',
-        variant === 'secondary' &&
-          'bg-white text-black hover:text-white hover:bg-black',
-        size === 'big' ? 'h-[60px] px-8' : 'h-9 px-4 text-sm',
-        disabled && 'pointer-events-none opacity-40',
-        className,
-      )}
-    >
-      {children}
-    </button>
-  );
-};
+export interface ButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+  fullWidth?: boolean;
+}
+
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, fullWidth, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'button';
+
+    return (
+      <Comp
+        type="button"
+        className={cn(buttonVariants({ variant, className, size }), {
+          'w-full': fullWidth,
+        })}
+        ref={ref}
+        {...props}
+      />
+    );
+  },
+);
+Button.displayName = 'Button';
+
+export { Button };

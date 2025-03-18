@@ -2,14 +2,15 @@
 
 import { z } from 'zod';
 
-import { prismaClient } from '../../shared/lib/db';
+import { prisma } from 'shared/lib/prisma';
+
 import { recipeSchema } from '../../shared/lib/validation/recipe';
 
 export async function createRecipe(input: unknown) {
   try {
     const data = recipeSchema.parse(input);
 
-    const recipe = await prismaClient.recipe.create({
+    const recipe = await prisma.recipe.create({
       data: {
         title: data.title,
         description: data.description,
