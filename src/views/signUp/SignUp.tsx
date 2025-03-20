@@ -54,7 +54,7 @@ export const SignUpPage = () => {
             href={STATIC_ROUTES.LOGIN}
             className="text-gray-600 hover:underline"
           >
-            Sign Up
+            Sign in
           </Link>
         </p>
       </div>

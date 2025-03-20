@@ -103,7 +103,7 @@ export const SignInPage = () => {
           href={STATIC_ROUTES.REGISTRATION}
           className="text-gray-600 hover:underline"
         >
-          Sign Up
+          Sign up
         </Link>
       </p>
     </section>
