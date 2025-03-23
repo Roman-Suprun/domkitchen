@@ -1,6 +1,7 @@
 import { IncomingHttpHeaders } from 'http';
 
-import isEmpty from '../../lib/utils/isEmpty';
+import { isEmpty } from 'shared/lib/isEmpty';
+
 import {
   TApiHandler,
   TErrorResponse,

@@ -2,16 +2,49 @@
 
 import { useState } from 'react';
 
+import { addReview } from 'actions/review/add';
 import { Star } from 'lucide-react';
+import { z } from 'zod';
 
-export const RecipeReviewForm = () => {
+const reviewSchema = z.object({
+  rating: z.number().min(1, 'Rating is required').max(5),
+  comment: z.string().min(5, 'Comment must be at least 5 characters'),
+});
+
+export const RecipeReviewForm = ({ recipeId }: { recipeId: string }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+  const [message, setMessage] = useState<string | null>(null);
+  const [errors, setErrors] = useState<{ rating?: string; comment?: string }>(
+    {},
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (rating === 0 || comment.trim() === '') return;
 
+    const validationResult = reviewSchema.safeParse({ rating, comment });
+
+    if (!validationResult.success) {
+      setErrors({
+        rating: validationResult.error.flatten().fieldErrors.rating?.join(', '),
+        comment: validationResult.error
+          .flatten()
+          .fieldErrors.comment?.join(', '),
+      });
+
+      return;
+    }
+
+    setErrors({});
+
+    const response = await addReview({ recipeId, rating, comment });
+
+    if (!response.success) {
+      setMessage(response.message || 'Failed to submit review.');
+      return;
+    }
+
+    setMessage('Review submitted successfully!');
     setRating(0);
     setComment('');
   };
@@ -19,6 +52,8 @@ export const RecipeReviewForm = () => {
   return (
     <div className="p-6 bg-gray-100 rounded-xl max-w-2xl mx-auto mt-14">
       <h3 className="text-xl font-semibold mb-3">Leave a Review</h3>
+      {message && <p className="text-green-500">{message}</p>}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex items-center gap-1">
           {[1, 2, 3, 4, 5].map(num => (
@@ -33,6 +68,9 @@ export const RecipeReviewForm = () => {
             />
           ))}
         </div>
+        {errors.rating && (
+          <p className="text-red-500 text-sm">{errors.rating}</p>
+        )}
 
         <textarea
           className="w-full p-3 border rounded-lg resize-none focus:ring focus:ring-blue-200"
@@ -41,6 +79,9 @@ export const RecipeReviewForm = () => {
           value={comment}
           onChange={e => setComment(e.target.value)}
         />
+        {errors.comment && (
+          <p className="text-red-500 text-sm">{errors.comment}</p>
+        )}
 
         <button
           type="submit"

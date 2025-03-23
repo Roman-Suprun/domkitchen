@@ -1,6 +1,6 @@
 import { IncomingHttpHeaders } from 'http';
 
-import { TRegistrationFormData } from '../../ts/common';
+import { TRegistrationFormData } from 'shared/ts/common';
 
 export type TRequestHandlerOptions = Record<string, unknown>;
 

@@ -1,4 +1,5 @@
-import { TRegistrationFormData } from '../../ts/common';
+import { TRegistrationFormData } from 'shared/ts/common';
+
 import apiHandler from './apiHandler';
 import { TRequestHandlerOptions } from './types';
 
