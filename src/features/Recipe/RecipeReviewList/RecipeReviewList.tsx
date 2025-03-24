@@ -3,9 +3,12 @@
 import { useEffect, useState } from 'react';
 
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
+
+import { Star } from 'lucide-react';
 
 import { getRecipeReviews } from 'actions/review/getListing';
-import { Star } from 'lucide-react';
+import { Pagination } from 'shared/ui/Pagination';
 
 type Review = {
   id: string;
@@ -19,25 +22,27 @@ type Review = {
 };
 
 export const RecipeReviewsList = ({ recipeId }: { recipeId: string }) => {
+  const searchParams = useSearchParams();
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalReviews, setTotalReviews] = useState<number>(0);
   const [loading, setLoading] = useState(true);
+
+  const page = Number(searchParams.get('page')) || 1;
 
   useEffect(() => {
     async function fetchReviews() {
-      const response = await getRecipeReviews({ recipeId, page, limit: 5 });
+      const response = await getRecipeReviews({ recipeId, page, limit: 6 });
 
       if (response.success) {
         setReviews(response?.data ?? []);
-        setTotalPages(response.pagination?.totalPages ?? 1);
+        setTotalReviews(response.pagination?.total ?? 0);
       }
 
       setLoading(false);
     }
 
     fetchReviews();
-  }, [recipeId, page]);
+  }, [page, recipeId]);
 
   if (loading) return <p>Loading reviews...</p>;
 
@@ -84,27 +89,7 @@ export const RecipeReviewsList = ({ recipeId }: { recipeId: string }) => {
             ))}
           </ul>
 
-          <div className="flex justify-center gap-4 mt-6">
-            <button
-              type="button"
-              className="px-4 py-2 bg-gray-200 rounded-md disabled:opacity-50"
-              disabled={page === 1}
-              onClick={() => setPage(prev => prev - 1)}
-            >
-              Previous
-            </button>
-            <span className="px-4 py-2">
-              Page {page} of {totalPages}
-            </span>
-            <button
-              type="button"
-              className="px-4 py-2 bg-gray-200 rounded-md disabled:opacity-50"
-              disabled={page === totalPages}
-              onClick={() => setPage(prev => prev + 1)}
-            >
-              Next
-            </button>
-          </div>
+          <Pagination total={totalReviews} />
         </>
       )}
     </div>

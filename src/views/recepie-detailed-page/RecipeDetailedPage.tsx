@@ -3,7 +3,6 @@ import { FC } from 'react';
 import Image from 'next/image';
 
 import { getRecipeById } from 'actions/recipe/getById';
-
 import { RecipeIngredients } from 'features/Recipe/RecipeIngredients';
 import { RecipeNutrition } from 'features/Recipe/RecipeNutrition';
 import { RecipeReviewForm } from 'features/Recipe/RecipeReviewForm';
@@ -52,7 +51,6 @@ export const RecipeDetailedPage: FC<RecipeDetailedPageProps> = async ({
       <p>{recipe?.description}</p>
       <RecipeIngredients ingredients={recipe?.ingredients} />
       <RecipeSteps steps={recipe?.steps} />
-      {/* TODO: show no form if review is already added */}
       {email && <RecipeReviewForm recipeId={recipeId} />}
       <RecipeReviewsList recipeId={recipeId} />
     </div>
