@@ -13,7 +13,7 @@ type RecipeCardProps = {
   title: string;
   cookingTime: number;
   difficulty: string;
-  // isFavourite: boolean;
+  isFavorite: boolean;
 };
 
 export const RecipeCard: FC<RecipeCardProps> = ({
@@ -21,7 +21,7 @@ export const RecipeCard: FC<RecipeCardProps> = ({
   title,
   cookingTime,
   difficulty,
-  // isFavourite = false,
+  isFavorite = false,
 }) => {
   return (
     <Link
@@ -37,8 +37,7 @@ export const RecipeCard: FC<RecipeCardProps> = ({
           alt={`Image of ${title}`}
           className="object-cover w-full h-full"
         />
-        {/* TODO: add support for isFavourite */}
-        <RecipeFavouriteButton isFavourite={false} />
+        <RecipeFavouriteButton recipeId={id} isFavorite={isFavorite} />
       </div>
       <h3 className="mt-4 text-lg font-semibold text-black">{title}</h3>
       <div className="mt-4 flex flex-wrap gap-x-4 text-gray-700">

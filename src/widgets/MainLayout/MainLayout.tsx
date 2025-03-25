@@ -11,20 +11,18 @@ interface MainLayoutProps extends PropsWithChildren {
 
 const MainLayout: FC<MainLayoutProps> = ({ children, className }) => {
   return (
-    <div className="flex flex-col w-full h-full min-h-full-screen">
+    <main className="flex flex-col w-full h-full min-h-full-screen">
       <Header />
-
-      <main
+      <div
         className={cn(
           'flex w-full flex-col flex-grow h-full items-center',
           className,
         )}
       >
         {children}
-      </main>
-
+      </div>
       <Footer />
-    </div>
+    </main>
   );
 };
 
