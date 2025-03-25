@@ -4,10 +4,12 @@ import { Recipe } from '@prisma/client';
 
 import { RecipeCard } from '../RecipeCard';
 
+type RecipeWithFavorite = Recipe & { isFavorite: boolean };
+
 type RecipeListProps = {
   title: string;
   description: string;
-  recipes?: Recipe[];
+  recipes?: RecipeWithFavorite[];
 };
 
 export const RecipeList: FC<RecipeListProps> = ({

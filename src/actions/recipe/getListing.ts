@@ -1,8 +1,10 @@
 'use server';
 
 import { Prisma } from '@prisma/client';
+import { getServerSession } from 'next-auth';
 import { z } from 'zod';
 
+import { authOptions } from 'shared/lib/auth';
 import { prisma } from 'shared/lib/prisma';
 
 import { getRecipesSchema } from '../../shared/lib/validation/recipe';
@@ -10,6 +12,9 @@ import { getRecipesSchema } from '../../shared/lib/validation/recipe';
 export async function getRecipesListing(input: unknown) {
   try {
     const { search, ingredients, page, limit } = getRecipesSchema.parse(input);
+
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
 
     const where: Prisma.RecipeWhereInput = {};
 
@@ -37,9 +42,25 @@ export async function getRecipesListing(input: unknown) {
       orderBy: { createdAt: 'desc' },
     });
 
+    let favoriteRecipeIds: Set<string> = new Set();
+
+    if (userId) {
+      const favorites = await prisma.favoriteRecipe.findMany({
+        where: { userId },
+        select: { recipeId: true },
+      });
+
+      favoriteRecipeIds = new Set(favorites.map(fav => fav.recipeId));
+    }
+
+    const recipesWithFavorites = recipes.map(recipe => ({
+      ...recipe,
+      isFavorite: favoriteRecipeIds.has(recipe.id),
+    }));
+
     return {
       success: true,
-      data: recipes,
+      data: recipesWithFavorites,
       pagination: {
         total: totalRecipes,
         page,
@@ -51,6 +72,7 @@ export async function getRecipesListing(input: unknown) {
     if (error instanceof z.ZodError) {
       return { success: false, errors: error.flatten().fieldErrors };
     }
+
     return {
       success: false,
       message: 'Something went wrong while fetching recipes',
