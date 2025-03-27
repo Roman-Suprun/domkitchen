@@ -34,7 +34,7 @@ export async function signUp(
         lastName,
         email,
         password: hashedPassword,
-        avatarUrl: '',
+        profileImage: '',
       },
     });
 

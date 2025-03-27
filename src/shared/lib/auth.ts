@@ -8,12 +8,18 @@ import bcrypt from 'bcryptjs';
 import { env } from 'env';
 import { getServerSession, type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google';
 
+import { googleAuth } from '../../actions/auth/googleAuthAction';
 import { prisma } from './prisma';
 
 export const authOptions = {
   secret: env.NEXTAUTH_SECRET,
   providers: [
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
@@ -47,7 +53,7 @@ export const authOptions = {
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
-          avatarUrl: user.avatarUrl,
+          profileImage: user.profileImage,
         };
       },
     }),
@@ -56,13 +62,22 @@ export const authOptions = {
     strategy: 'jwt',
   },
   callbacks: {
+    async signIn({ account, profile }) {
+      if (account?.provider === 'google') {
+        const authResult = googleAuth(profile as GoogleProfile);
+
+        return authResult;
+      }
+
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.firstName = user.firstName;
         token.lastName = user.lastName;
         token.email = user.email;
-        token.avatarUrl = user.avatarUrl;
+        token.profileImage = user.profileImage;
       }
       return token;
     },
@@ -72,7 +87,7 @@ export const authOptions = {
         session.user.firstName = token.firstName;
         session.user.lastName = token.lastName;
         session.user.email = token.email;
-        session.user.avatarUrl = token.avatarUrl;
+        session.user.profileImage = token.profileImage;
       }
       return session;
     },

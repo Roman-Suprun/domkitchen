@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { prisma } from 'shared/lib/prisma';
 
-export async function getIngredients() {
+export const getIngredients = async () => {
   try {
     const ingredients = await prisma.ingredient.findMany({
       orderBy: { name: 'asc' },
@@ -23,4 +23,4 @@ export async function getIngredients() {
       message: 'Something went wrong while fetching ingredients',
     };
   }
-}
+};
