@@ -7,7 +7,7 @@ declare module 'next-auth' {
       firstName: string;
       lastName: string;
       email: string;
-      avatarUrl: string | null;
+      profileImage: string | null;
     } & DefaultSession['user'];
   }
 
@@ -16,7 +16,7 @@ declare module 'next-auth' {
     firstName: string;
     lastName: string;
     email: string;
-    avatarUrl: string | null;
+    profileImage: string | null;
   }
 }
 
@@ -26,6 +26,6 @@ declare module 'next-auth/jwt' {
     firstName: string;
     lastName: string;
     email: string;
-    avatarUrl: string | null;
+    profileImage: string | null;
   }
 }

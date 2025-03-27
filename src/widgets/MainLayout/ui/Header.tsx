@@ -9,7 +9,6 @@ import { LogoutButton } from './LogoutButton';
 
 const Header = async () => {
   const session = await auth();
-
   const { user } = session || {};
   const { email } = user || {};
 
@@ -29,22 +28,26 @@ const Header = async () => {
             </Link>
           </li>
         )}
-        <li>
-          <Link
-            href={STATIC_ROUTES.LOGIN}
-            className="text-gray-600 hover:underline"
-          >
-            Sign In
-          </Link>
-        </li>
-        <li>
-          <Link
-            href={STATIC_ROUTES.REGISTRATION}
-            className="text-gray-600 hover:underline"
-          >
-            Sign Up
-          </Link>
-        </li>
+        {!email && (
+          <li>
+            <Link
+              href={STATIC_ROUTES.LOGIN}
+              className="text-gray-600 hover:underline"
+            >
+              Sign In
+            </Link>
+          </li>
+        )}
+        {!email && (
+          <li>
+            <Link
+              href={STATIC_ROUTES.REGISTRATION}
+              className="text-gray-600 hover:underline"
+            >
+              Sign Up
+            </Link>
+          </li>
+        )}
         {email && <LogoutButton />}
       </ul>
     </section>

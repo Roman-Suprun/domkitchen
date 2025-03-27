@@ -1,13 +1,16 @@
 'use client';
 
+import { useState } from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
+import { signUp } from 'actions/auth/signUpAction';
 import { STATIC_ROUTES } from 'shared/constants/staticRoutes';
-import { Button } from 'shared/ui/Button';
+import { Button, GoogleAuthButton } from 'shared/ui/Button';
 import {
   Form,
   FormControl,
@@ -18,11 +21,16 @@ import {
 } from 'shared/ui/Form';
 import { Input } from 'shared/ui/Input';
 
-import { RegistrationFormData, registrationFormSchema } from './signUp.types';
-import { signUp } from './signUpActions';
+import {
+  RegistrationFormData,
+  registrationFormSchema,
+} from '../../actions/auth/signUp.types';
+import { AuthDivider } from '../../shared/ui/AuthDivider';
 
 export const SignUpPage = () => {
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const form = useForm<RegistrationFormData>({
     defaultValues: {
@@ -35,13 +43,17 @@ export const SignUpPage = () => {
   });
 
   const onSubmit = async (data: RegistrationFormData) => {
+    setLoading(true);
+    setErrorMessage(null);
     try {
       await signUp(data);
 
-      router.push(STATIC_ROUTES.LOGIN);
+      router.refresh();
+      router.push(STATIC_ROUTES.HOME);
     } catch {
-      //
+      setErrorMessage('Something went wrong');
     }
+    setLoading(false);
   };
 
   return (
@@ -112,7 +124,7 @@ export const SignUpPage = () => {
               <FormItem>
                 <FormLabel>Create a password</FormLabel>
                 <FormControl>
-                  <Input fullWidth {...field} />
+                  <Input type="password" fullWidth {...field} />
                 </FormControl>
                 <FormDescription>
                   Use 8 or more characters with a mix of letters, numbers &
@@ -122,11 +134,23 @@ export const SignUpPage = () => {
             )}
           />
 
+          {errorMessage && (
+            <p className="text-red-500 text-sm bg-red-100 p-2 rounded-md">
+              {errorMessage}
+            </p>
+          )}
+
           <Button type="submit" size="xl">
             Create an account
+            {loading ? 'Wait...' : 'Create an account'}
           </Button>
         </form>
       </Form>
+
+      <div className="flex flex-col items-center gap-y-4 w-full">
+        <AuthDivider />
+        <GoogleAuthButton />
+      </div>
     </section>
   );
 };

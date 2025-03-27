@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { STATIC_ROUTES } from 'shared/constants/staticRoutes';
-import { Button } from 'shared/ui/Button';
+import { Button, GoogleAuthButton } from 'shared/ui/Button';
 import {
   Form,
   FormControl,
@@ -18,6 +18,8 @@ import {
   FormLabel,
 } from 'shared/ui/Form';
 import { Input } from 'shared/ui/Input';
+
+import { AuthDivider } from '../../shared/ui/AuthDivider';
 
 const signInFormSchema = z.object({
   email: z.string().email('Invalid email'),
@@ -85,7 +87,7 @@ export const SignInPage = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input fullWidth {...field} />
+                  <Input type="password" fullWidth {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -101,11 +103,16 @@ export const SignInPage = () => {
         Don&apos;t have an account?{' '}
         <Link
           href={STATIC_ROUTES.REGISTRATION}
-          className="text-gray-600 hover:underline"
+          className="text-gray-600 underline font-medium"
         >
           Sign up
         </Link>
       </p>
+
+      <div className="flex flex-col items-center gap-y-4 w-full">
+        <AuthDivider />
+        <GoogleAuthButton />
+      </div>
     </section>
   );
 };
