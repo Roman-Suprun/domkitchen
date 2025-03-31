@@ -10,11 +10,13 @@ import { Star } from 'lucide-react';
 import { getRecipeReviews } from 'actions/review/getListing';
 import { Pagination } from 'shared/ui/Pagination';
 
+import { AvatarPlaceholder } from '../../../shared/ui/AvatarPlaceholder';
+
 type Review = {
   id: string;
   user: {
     name: string;
-    avatar: string;
+    avatar: string | null;
   };
   rating: number;
   comment: string;
@@ -62,13 +64,21 @@ export const RecipeReviewsList = ({ recipeId }: { recipeId: string }) => {
                 key={review.id}
                 className="flex gap-4 border-b pb-4 last:border-none"
               >
-                <Image
-                  src={review.user.avatar}
-                  alt={`${review.user.name}'s avatar`}
-                  width={50}
-                  height={50}
-                  className="w-12 h-12 rounded-full object-cover"
-                />
+                {review.user.avatar ? (
+                  <Image
+                    src={review.user.avatar}
+                    alt={`${review.user.name}'s avatar`}
+                    width={50}
+                    height={50}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                ) : (
+                  <AvatarPlaceholder
+                    size="s"
+                    firstName={review.user.name.split(' ')[0]}
+                    lastName={review.user.name.split(' ')[1]}
+                  />
+                )}
 
                 <div className="flex-1">
                   <h4 className="font-semibold">{review.user.name}</h4>

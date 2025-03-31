@@ -38,7 +38,7 @@ export async function getRecipeReviews(input: unknown) {
       id: review.id,
       user: {
         name: `${review.user.firstName} ${review.user.lastName}`,
-        avatar: review.user.profileImage || '/default-avatar.png',
+        avatar: review.user.profileImage,
       },
       rating: review.rating,
       comment: review.comment,

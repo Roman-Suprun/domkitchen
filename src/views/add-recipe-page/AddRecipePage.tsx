@@ -94,6 +94,11 @@ export const AddRecipePage = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image size must be less than 5MB');
+      return;
+    }
+
     const localUrl = URL.createObjectURL(file);
     setPreviewUrl(localUrl);
 
@@ -115,6 +120,8 @@ export const AddRecipePage = () => {
   };
 
   const onSubmit = async (data: RecipeFormValues) => {
+    if (isPending) return;
+
     const res = await createRecipe(data);
     if (res.success && res.recipe) {
       toast.success('Recipe created successfully!');
@@ -205,7 +212,16 @@ export const AddRecipePage = () => {
               <FormItem>
                 <FormLabel>Servings</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} fullWidth />
+                  <Input
+                    type="number"
+                    {...field}
+                    onChange={e =>
+                      field.onChange(
+                        e.target.value === '' ? '' : Number(e.target.value),
+                      )
+                    }
+                    fullWidth
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -305,7 +321,7 @@ export const AddRecipePage = () => {
             </Button>
           </div>
 
-          <Button type="submit" className="w-full">
+          <Button disabled={isPending} type="submit" className="w-full">
             Submit Recipe
           </Button>
         </form>

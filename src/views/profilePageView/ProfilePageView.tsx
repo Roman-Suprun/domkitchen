@@ -6,6 +6,7 @@ import { auth } from 'shared/lib/auth';
 
 import { getUser } from '../../actions/profile/getUserAction';
 import { getUserAllergies } from '../../actions/profile/getUserAllergies';
+import { AvatarPlaceholder } from '../../shared/ui/AvatarPlaceholder';
 
 export const ProfilePageView = async () => {
   const session = await auth();
@@ -28,10 +29,7 @@ export const ProfilePageView = async () => {
           fill
         />
       ) : (
-        <div className="text-4xl flex bg-slate-400 rounded-full w-[100px] h-[100px] items-center justify-center">
-          {firstName?.charAt(0)}
-          {lastName?.charAt(0)}
-        </div>
+        <AvatarPlaceholder size="l" firstName={firstName} lastName={lastName} />
       )}
 
       <div className="flex mt-10 text-4xl">

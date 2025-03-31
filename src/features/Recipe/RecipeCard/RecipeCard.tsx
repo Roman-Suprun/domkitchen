@@ -12,6 +12,7 @@ type RecipeCardProps = {
   id: string;
   title: string;
   cookingTime: number;
+  imageUrl: string | null;
   difficulty: string;
   isFavorite: boolean;
 };
@@ -21,6 +22,7 @@ export const RecipeCard: FC<RecipeCardProps> = ({
   title,
   cookingTime,
   difficulty,
+  imageUrl,
   isFavorite = false,
 }) => {
   return (
@@ -31,7 +33,7 @@ export const RecipeCard: FC<RecipeCardProps> = ({
     >
       <div className="max-h-[200px] relative rounded-3xl overflow-hidden">
         <Image
-          src="/recepie_listing.png"
+          src={imageUrl || '/recepie_listing.png'}
           width={290}
           height={200}
           alt={`Image of ${title}`}
