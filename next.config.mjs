@@ -13,11 +13,16 @@ const nextConfig = {
     unoptimized: false, // true for `yarn export`
     formats: ['image/webp'],
     minimumCacheTTL: 60,
-    domains: ['lh3.googleusercontent.com'], // TODO: need move all domains in env variable
+    domains: ['lh3.googleusercontent.com', 'domkitchenstorrage.blob.core.windows.net'], // TODO: need move all domains in env variable
     deviceSizes: [340, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [
       20, 21, 24, 37, 40, 67, 77, 140, 160, 280, 320, 549, 557, 558, 865, 1920,
     ],
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '4mb',
+    },
   },
 };
 
