@@ -100,6 +100,12 @@ export const AddRecipePage = () => {
     startTransition(async () => {
       try {
         const uploadedUrl = await uploadImage(file);
+
+        if (!uploadedUrl) {
+          toast.error('Image upload failed');
+
+          return;
+        }
         setValue('imageUrl', uploadedUrl);
         toast.success('Image uploaded successfully');
       } catch {
