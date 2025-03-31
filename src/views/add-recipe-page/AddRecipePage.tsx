@@ -223,6 +223,8 @@ export const AddRecipePage = () => {
                 />
                 {previewUrl && (
                   <NextImage
+                    width={300}
+                    height={300}
                     src={previewUrl}
                     alt="Preview"
                     className="mt-2 w-40 h-40 object-cover rounded shadow"
