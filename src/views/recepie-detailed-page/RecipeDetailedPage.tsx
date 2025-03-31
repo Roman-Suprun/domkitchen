@@ -40,7 +40,7 @@ export const RecipeDetailedPage: FC<RecipeDetailedPageProps> = async ({
             <Image
               width={840}
               height={600}
-              src="/detailed_recepie.png"
+              src={recipe?.imageUrl || '/detailed_recepie.png'}
               alt="Detailed Recepie Image"
               className="w-full"
             />
