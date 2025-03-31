@@ -10,10 +10,12 @@ export async function googleAuth(profile: GoogleProfile) {
   }
 
   try {
+    // @ts-ignore
     await prisma.user.upsert({
       where: {
         email: profile.email,
       },
+      // @ts-ignore
       create: {
         email: profile.email,
         firstName: profile.given_name,
