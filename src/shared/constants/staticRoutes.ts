@@ -7,4 +7,5 @@ export const STATIC_ROUTES = {
   PROFILE: `${BASE_ROUTE}profile`,
   ADD_INGREDIENT: `${BASE_ROUTE}add/ingredient`,
   ADD_RECIPE: `${BASE_ROUTE}add/recipe`,
+  RECIPE: `${BASE_ROUTE}recipe`,
 };

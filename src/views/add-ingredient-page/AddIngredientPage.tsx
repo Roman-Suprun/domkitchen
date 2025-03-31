@@ -1,51 +1,82 @@
 'use client';
 
-import { FormProvider, useForm } from 'react-hook-form';
+import { useMemo } from 'react';
 
+import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+
+import { addIngredient } from '../../actions/ingredient/add';
+// eslint-disable-next-line import/no-named-as-default
+import ingredientCategories from '../../shared/constants/ingredientCategories';
 import { Button } from '../../shared/ui/Button';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from '../../shared/ui/Form';
 import { Input } from '../../shared/ui/Input';
 import { Select } from '../../shared/ui/Select';
+import Toast from '../../shared/ui/Toast';
 
 interface IngredientFormValues {
-  name: string;
+  ingredient: string;
   category: string;
 }
-
-const categoryOptions = [
-  { value: 'vegetables', label: 'Vegetables' },
-  { value: 'fruits', label: 'Fruits' },
-  { value: 'dairy', label: 'Dairy Products' },
-  { value: 'meats', label: 'Meats' },
-  { value: 'seafood', label: 'Seafood' },
-];
 
 export const AddIngredientPage = () => {
   const methods = useForm<IngredientFormValues>({
     defaultValues: {
-      name: '',
+      ingredient: '',
       category: '',
     },
   });
 
-  const { setValue, watch } = methods;
+  const { setValue, watch, reset } = methods;
   const selectedCategory = watch('category');
 
-  const onSubmit = (data: IngredientFormValues) => {
-    console.log('Submitted Data:', data);
+  const onSubmit = async (data: IngredientFormValues) => {
+    const { ingredient: name, category } = data;
+
+    await addIngredient({ name, category });
+
+    reset();
+
+    toast.success(
+      <div className="flex gap-x-2">{`${name} successfully added`}</div>,
+      { autoClose: 3000 },
+    );
   };
 
+  const categoryOptions = useMemo(() => {
+    return Object.entries(ingredientCategories).map(([value, label]) => ({
+      label,
+      value,
+    }));
+  }, []);
+
   return (
-    <div className="text-center flex flex-col items-center w-full max-w-[500px]">
-      <h3 className="text-2xl font-semibold mb-6">Add Ingredient</h3>
+    <div className="flex flex-col items-center w-full max-w-[500px]">
+      <Toast />
+      <h3 className="text-2xl font-semibold mb-6 text-center">
+        Add Ingredient
+      </h3>
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
           className="space-y-4 w-full"
         >
-          <Input
-            name="imgregient"
-            label="Ingredient Name"
-            placeholder="Enter ingredient name"
+          <FormField
+            control={methods.control}
+            name="ingredient"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Enter ingredient name</FormLabel>
+                <FormControl>
+                  <Input fullWidth {...field} />
+                </FormControl>
+              </FormItem>
+            )}
           />
           <Select
             name="category"

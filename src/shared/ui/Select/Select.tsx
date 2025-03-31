@@ -4,6 +4,7 @@ import ReactSelect from 'react-select';
 import { twMerge } from 'tailwind-merge';
 
 import { cn } from '../../lib/cn';
+import { customSelectStyles } from './styles';
 
 interface Option {
   value: string;
@@ -46,7 +47,7 @@ export const Select = ({
         className={twMerge(
           cn('border rounded-xl w-full outline-none', className),
         )}
-        classNames={{}}
+        styles={customSelectStyles}
         classNamePrefix="react-select"
         isMulti={isMulti}
         onChange={selectedOptions => {
