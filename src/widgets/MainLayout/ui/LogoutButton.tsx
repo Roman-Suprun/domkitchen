@@ -7,7 +7,11 @@ import { signOut } from 'next-auth/react';
 import { Button } from 'shared/ui/Button';
 
 const LogoutButton = () => {
-  return <Button onClick={() => signOut()}>Logout</Button>;
+  return (
+    <Button className="w-full" onClick={() => signOut()}>
+      Logout
+    </Button>
+  );
 };
 
 export { LogoutButton };
