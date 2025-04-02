@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import { signUp } from 'actions/auth/signUpAction';
 import { STATIC_ROUTES } from 'shared/constants/staticRoutes';
@@ -18,6 +19,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from 'shared/ui/Form';
 import { Input } from 'shared/ui/Input';
 
@@ -29,8 +31,7 @@ import { AuthDivider } from '../../shared/ui/AuthDivider';
 
 export const SignUpPage = () => {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<RegistrationFormData>({
     defaultValues: {
@@ -44,16 +45,16 @@ export const SignUpPage = () => {
 
   const onSubmit = async (data: RegistrationFormData) => {
     setLoading(true);
-    setErrorMessage(null);
     try {
       await signUp(data);
 
-      router.refresh();
-      router.push(STATIC_ROUTES.HOME);
-    } catch {
-      setErrorMessage('Something went wrong');
+      toast.success('Account created! Please log in.');
+      router.push(STATIC_ROUTES.LOGIN);
+    } catch (error) {
+      toast.error('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -86,6 +87,7 @@ export const SignUpPage = () => {
                   <FormControl>
                     <Input fullWidth {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -99,6 +101,7 @@ export const SignUpPage = () => {
                   <FormControl>
                     <Input fullWidth {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -113,6 +116,7 @@ export const SignUpPage = () => {
                 <FormControl>
                   <Input fullWidth {...field} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -130,19 +134,13 @@ export const SignUpPage = () => {
                   Use 8 or more characters with a mix of letters, numbers &
                   symbols
                 </FormDescription>
+                <FormMessage />
               </FormItem>
             )}
           />
 
-          {errorMessage && (
-            <p className="text-red-500 text-sm bg-red-100 p-2 rounded-md">
-              {errorMessage}
-            </p>
-          )}
-
-          <Button type="submit" size="xl">
-            Create an account
-            {loading ? 'Wait...' : 'Create an account'}
+          <Button type="submit" size="xl" disabled={loading}>
+            {loading ? 'Creating...' : 'Create an account'}
           </Button>
         </form>
       </Form>
