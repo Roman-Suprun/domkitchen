@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 
 import NotFound from 'next/dist/client/components/not-found-error';
 
+import { getUser } from '../../../actions/profile/getUserAction';
 import { getRecipesListing } from '../../../actions/recipe/getListing';
 import { RecipeIngredientsFilter } from '../../../features/Recipe/RecipeIngredientsFilter';
 import { RecipeList } from '../../../features/Recipe/RecipeList';
@@ -19,6 +20,8 @@ const Page: FC<RecipesListingProps> = async ({ searchParams }) => {
 
   const session = await auth();
   const { user } = session || {};
+  const { email } = user || {};
+  const { data } = await getUser(email);
 
   const recipesResponse = await getRecipesListing({
     page: Number(page),
@@ -34,7 +37,7 @@ const Page: FC<RecipesListingProps> = async ({ searchParams }) => {
 
   return (
     <section className="max-w-7xl min-w-[80rem]">
-      <RecipeIngredientsFilter userId={user?.id} />
+      <RecipeIngredientsFilter userId={data?.id} />
       <RecipeList recipes={recipes} />
       <Pagination total={pagination.total} perPage={PER_PAGE} />
     </section>
