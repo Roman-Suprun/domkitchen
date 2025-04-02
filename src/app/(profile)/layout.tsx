@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 
-import { CentredLayout } from 'widgets/CentredLayout';
+import { MainLayout } from 'widgets/MainLayout';
 
 export default function ProfileLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
-  return <CentredLayout>{children}</CentredLayout>;
+  return <MainLayout>{children}</MainLayout>;
 }
