@@ -10,16 +10,16 @@ import getSearchParams from 'shared/lib/utils/getSearchParams';
 
 type TPaginationProps = {
   total: number;
+  perPage?: number;
 };
 
 type TParamsObj = {
   page?: string;
 };
 
-const perPage = 6;
-
 export const Pagination: React.FC<TPaginationProps> = ({
   total: totalItems,
+  perPage = 6,
 }) => {
   const searchParams = useSearchParams();
   const router = useRouter();

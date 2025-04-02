@@ -9,4 +9,5 @@ export const STATIC_ROUTES = {
   ADD_RECIPE: `${BASE_ROUTE}add/recipe`,
   RECIPE: `${BASE_ROUTE}recipe`,
   RECIPE_FAVORITE: `${BASE_ROUTE}recipe/favorite`,
+  RECIPES: `${BASE_ROUTE}recipes`,
 };
