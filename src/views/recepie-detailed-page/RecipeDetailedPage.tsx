@@ -2,6 +2,8 @@ import { FC } from 'react';
 
 import Image from 'next/image';
 
+import { getUser } from 'actions/profile/getUserAction';
+import { getUserAllergies } from 'actions/profile/getUserAllergies';
 import { getRecipeById } from 'actions/recipe/getById';
 import { RecipeIngredients } from 'features/Recipe/RecipeIngredients';
 import { RecipeNutrition } from 'features/Recipe/RecipeNutrition';
@@ -26,10 +28,12 @@ export const RecipeDetailedPage: FC<RecipeDetailedPageProps> = async ({
   recipeId,
 }) => {
   const session = await auth();
-  const { data: recipe } = await getRecipeById(recipeId);
-
   const { user } = session || {};
   const { email } = user || {};
+  const { data } = await getUser(email);
+  const { id } = data || {};
+  const { data: recipe } = await getRecipeById(recipeId);
+  const userAllergiesIngredients = await getUserAllergies(id);
 
   return (
     <div className="pt-16 max-w-7xl m-auto">
@@ -49,7 +53,10 @@ export const RecipeDetailedPage: FC<RecipeDetailedPageProps> = async ({
         <RecipeNutrition nutrition={nutritionData} />
       </div>
       <p>{recipe?.description}</p>
-      <RecipeIngredients ingredients={recipe?.ingredients} />
+      <RecipeIngredients
+        ingredients={recipe?.ingredients}
+        userAllergiesIngredients={userAllergiesIngredients}
+      />
       <RecipeSteps steps={recipe?.steps} />
       {email && <RecipeReviewForm recipeId={recipeId} />}
       <RecipeReviewsList recipeId={recipeId} />

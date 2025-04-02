@@ -2,15 +2,17 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { STATIC_ROUTES } from 'shared/constants/staticRoutes';
 import { LogoutButton } from 'widgets/MainLayout/ui/LogoutButton';
 
+import { AvatarPlaceholder } from '../AvatarPlaceholder';
+
 type UserAvatarMenuProps = {
   user: {
     firstName?: string | null;
+    lastName?: string | null;
     email?: string | null;
     image?: string | null;
   };
@@ -19,14 +21,6 @@ type UserAvatarMenuProps = {
 export function UserAvatarMenu({ user }: UserAvatarMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const initials = user.firstName
-    ? user.firstName
-        .split(' ')
-        .map(n => n[0])
-        .join('')
-        .toUpperCase()
-    : 'U';
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -46,17 +40,13 @@ export function UserAvatarMenu({ user }: UserAvatarMenuProps) {
       <button
         type="button"
         onClick={() => setIsOpen(prev => !prev)}
-        className="flex items-center justify-center w-9 h-9 rounded-full bg-gray-200 text-sm font-medium focus:outline-none"
+        className="flex items-center justify-center rounded-full bg-gray-200 text-sm font-medium focus:outline-none"
       >
-        {user.image ? (
-          <Image
-            src={user.image}
-            alt={user.firstName ?? ''}
-            className="w-full h-full rounded-full object-cover"
-          />
-        ) : (
-          <span>{initials}</span>
-        )}
+        <AvatarPlaceholder
+          size="s"
+          firstName={user?.firstName?.[0]}
+          lastName={user?.lastName?.[0]}
+        />
       </button>
 
       {isOpen && (

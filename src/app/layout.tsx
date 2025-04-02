@@ -5,6 +5,8 @@ import { Urbanist } from 'next/font/google';
 
 import 'app/styles/global.css';
 
+import Toast from 'shared/ui/Toast';
+
 const urbanist = Urbanist({
   subsets: ['latin'],
   variable: '--font-urbanist',
@@ -21,7 +23,10 @@ export default function RootLayout({
 }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en">
-      <body className={urbanist.className}>{children}</body>
+      <body className={urbanist.className}>
+        <Toast />
+        {children}
+      </body>
     </html>
   );
 }

@@ -7,7 +7,6 @@ import { auth } from 'shared/lib/auth';
 import { UserAvatarMenu } from 'shared/ui/UserAvatarMenu';
 
 import { Logo } from '../../../shared/ui/Logo';
-import { LogoutButton } from './LogoutButton';
 
 const Header = async () => {
   const session = await auth();

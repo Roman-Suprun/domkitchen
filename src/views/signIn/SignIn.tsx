@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { z } from 'zod';
 
 import { STATIC_ROUTES } from 'shared/constants/staticRoutes';
@@ -16,6 +17,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from 'shared/ui/Form';
 import { Input } from 'shared/ui/Input';
 
@@ -40,25 +42,26 @@ export const SignInPage = () => {
   });
 
   const onSubmit = async (data: SignInFormData) => {
-    try {
-      const { email, password } = data;
+    const { email, password } = data;
 
-      await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
+    const result = await signIn('credentials', {
+      email,
+      password,
+      redirect: false,
+    });
 
+    if (result?.ok) {
+      toast.success('Signed in successfully!');
       router.refresh();
       router.push(STATIC_ROUTES.HOME);
-    } catch {
-      //
+    } else {
+      toast.error('Invalid credentials. Please try again.');
     }
   };
 
   return (
     <section className="max-w-[580px] w-full flex flex-col items-center gap-6">
-      <div className="flex flex-col items-center gap-0.5  ">
+      <div className="flex flex-col items-center gap-0.5">
         <h1 className="text-3xl font-bold">Sign In</h1>
       </div>
 
@@ -76,6 +79,7 @@ export const SignInPage = () => {
                 <FormControl>
                   <Input fullWidth {...field} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -89,6 +93,7 @@ export const SignInPage = () => {
                 <FormControl>
                   <Input type="password" fullWidth {...field} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
