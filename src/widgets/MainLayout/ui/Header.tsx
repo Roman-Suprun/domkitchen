@@ -17,6 +17,14 @@ const Header = async () => {
     <section className="w-full h-[110px] border-b flex justify-between items-center px-10">
       <Logo />
       <ul className="flex flex-row gap-x-10 items-center">
+        <li>
+          <Link
+            href={STATIC_ROUTES.RECIPES}
+            className="text-gray-600 hover:underline"
+          >
+            Recipes
+          </Link>
+        </li>
         {email && (
           <>
             <li>

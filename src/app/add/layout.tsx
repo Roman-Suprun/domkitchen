@@ -1,8 +1,10 @@
 import React, { FC, ReactNode } from 'react';
 
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 import { STATIC_ROUTES } from '../../shared/constants/staticRoutes';
+import { auth } from '../../shared/lib/auth';
 import { Logo } from '../../shared/ui/Logo';
 
 type LayoutProps = {
@@ -15,6 +17,12 @@ const LINKS = [
 ];
 
 const Layout: FC<LayoutProps> = async ({ children }) => {
+  const session = await auth();
+
+  if (!session) {
+    return redirect(STATIC_ROUTES.LOGIN);
+  }
+
   return (
     <section className="w-full min-h-[calc(100vh-110px)] flex ">
       <nav className="w-[320px] border-r  min-h-[calc(100vh-110px)] px-10 py-4">

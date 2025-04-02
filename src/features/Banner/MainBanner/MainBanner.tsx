@@ -1,8 +1,11 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { Button } from 'shared/ui/Button';
+
+import { STATIC_ROUTES } from '../../../shared/constants/staticRoutes';
 
 export const MainBanner = () => {
   return (
@@ -17,7 +20,9 @@ export const MainBanner = () => {
             Discover step-by-step recipes, tips, and tricks to make your kitchen
             experience more delicious and enjoyable.
           </p>
-          <Button>Get Started</Button>
+          <Link href={STATIC_ROUTES.RECIPES}>
+            <Button>Get Started</Button>
+          </Link>
         </div>
 
         <div className="flex justify-center md:justify-end">
