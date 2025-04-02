@@ -3,6 +3,10 @@
 import { prisma } from 'shared/lib/prisma';
 
 export const getUserAllergies = async (userId: string | undefined) => {
+  if (!userId) {
+    return [];
+  }
+
   try {
     const userAllergies = await prisma.userAllergies.findMany({
       where: { userId },
