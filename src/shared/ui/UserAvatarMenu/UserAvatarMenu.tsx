@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+import NextImage from 'next/image';
 import Link from 'next/link';
 
 import { STATIC_ROUTES } from 'shared/constants/staticRoutes';
@@ -13,6 +14,7 @@ type UserAvatarMenuProps = {
   user: {
     firstName?: string | null;
     lastName?: string | null;
+    profileImage?: string | null;
     email?: string | null;
     image?: string | null;
   };
@@ -42,11 +44,20 @@ export function UserAvatarMenu({ user }: UserAvatarMenuProps) {
         onClick={() => setIsOpen(prev => !prev)}
         className="flex items-center justify-center rounded-full bg-gray-200 text-sm font-medium focus:outline-none"
       >
-        <AvatarPlaceholder
-          size="s"
-          firstName={user?.firstName?.[0]}
-          lastName={user?.lastName?.[0]}
-        />
+        {user.profileImage ? (
+          <NextImage
+            className="!relative rounded-full !w-[100px] !h-[100px]"
+            src={user.profileImage}
+            alt=""
+            fill
+          />
+        ) : (
+          <AvatarPlaceholder
+            size="s"
+            firstName={String(user.firstName)}
+            lastName={String(user.lastName)}
+          />
+        )}
       </button>
 
       {isOpen && (
